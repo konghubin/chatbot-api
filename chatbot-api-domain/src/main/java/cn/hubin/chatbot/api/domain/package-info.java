@@ -1,0 +1,1 @@
+package cn.hubin.chatbot.api.domain;
