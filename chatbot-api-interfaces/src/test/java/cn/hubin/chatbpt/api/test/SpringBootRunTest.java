@@ -1,6 +1,7 @@
 package cn.hubin.chatbpt.api.test;
 
 import cn.hubin.chatbot.api.ApiApplication;
+import cn.hubin.chatbot.api.domain.ai.IOpenAi;
 import cn.hubin.chatbot.api.domain.zsxq.IZsxqApi;
 import cn.hubin.chatbot.api.domain.zsxq.model.aggregates.UnAnsweredQuestionsAggregates;
 import com.alibaba.fastjson.JSON;
@@ -27,10 +28,18 @@ public class SpringBootRunTest {
 
     @Resource
     private IZsxqApi zsxqApi;
+    @Resource
+    private IOpenAi openAi;
 
     @Test
     public void test_zsxqApi() throws IOException{
         UnAnsweredQuestionsAggregates unAnsweredQuestionsAggregates = zsxqApi.queryUnAnsweredQuestionsTopicId(groupId, cookie);
         logger.info("测试结果：{}", JSON.toJSONString(unAnsweredQuestionsAggregates));
+    }
+
+    @Test
+    public void test_open_ai() throws IOException{
+        String response = openAi.doChatGpt("请帮我写一个冒泡排序！");
+        logger.info("测试结果：{}", response);
     }
 }

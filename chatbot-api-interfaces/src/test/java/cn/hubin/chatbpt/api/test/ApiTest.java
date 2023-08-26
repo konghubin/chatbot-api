@@ -1,6 +1,8 @@
 package cn.hubin.chatbpt.api.test;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -12,6 +14,8 @@ import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 
 public class ApiTest {
     @Test
@@ -47,6 +51,42 @@ public class ApiTest {
                 "    \"image_ids\": []\n" +
                 "  }\n" +
                 "}";
+        StringEntity stringEntity = new StringEntity(paramJson, ContentType.create("text/json","UTF-8"));
+        post.setEntity(stringEntity);
+
+        CloseableHttpResponse response = httpClient.execute(post);
+
+        if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK){
+            String res = EntityUtils.toString(response.getEntity());
+            System.out.println(res);
+        }else{
+            System.out.println(response.getStatusLine().getStatusCode());
+        }
+    }
+
+    @Test
+    public void test_chatGpt() throws IOException{
+        // Define proxy settings
+        HttpHost proxy = new HttpHost("127.0.0.1", 7890);
+
+        // Create a custom request config with proxy
+        RequestConfig requestConfig = RequestConfig.custom()
+                .setProxy(proxy)
+                .build();
+        CloseableHttpClient httpClient = HttpClientBuilder.create()
+                .setDefaultRequestConfig(requestConfig)
+                .build();
+
+        HttpPost post = new HttpPost("https://api.openai.com/v1/chat/completions");
+        post.addHeader("Content-Type", "application/json");
+        post.addHeader("Authorization", "Bearer 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");
+
+
+        String paramJson = "{\n" +
+                "     \"model\": \"gpt-3.5-turbo\",\n" +
+                "     \"messages\": [{\"role\": \"user\", \"content\": \"请用Java帮我写一个冒泡排序!\"}],\n" +
+                "     \"temperature\": 0.7\n" +
+                "   }";
         StringEntity stringEntity = new StringEntity(paramJson, ContentType.create("text/json","UTF-8"));
         post.setEntity(stringEntity);
 
