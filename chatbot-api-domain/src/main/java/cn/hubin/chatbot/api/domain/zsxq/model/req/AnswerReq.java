@@ -1,17 +1,18 @@
 package cn.hubin.chatbot.api.domain.zsxq.model.req;
 
 public class AnswerReq {
-    private ReqData reqData;
+    private ReqData req_data;
 
-    public AnswerReq(ReqData reqData) {
-        this.reqData = reqData;
+    public ReqData getReq_data() {
+        return req_data;
     }
 
-    public ReqData getReqData() {
-        return reqData;
+    public void setReq_data(ReqData req_data) {
+        this.req_data = req_data;
     }
 
-    public void setReqData(ReqData reqData) {
-        this.reqData = reqData;
+    public AnswerReq(ReqData req_data) {
+        this.req_data = req_data;
     }
+
 }
